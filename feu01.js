@@ -1,4 +1,4 @@
-const userString = "-2 - 4 * (7 - 8 * 8 + 3) + 7 / 7";
+const userString = "(-2 + 4) * 3";
 
 const evaluateExpression = (string) => {
     // String to Array for calculate
@@ -8,11 +8,9 @@ const evaluateExpression = (string) => {
 
 const handleParenthesisAndCalculate = (array) => {
     let i = -1;
-    let extractOperation = [];
 
     while ((i = array.indexOf("(", i + 1)) >= 0) {
         let secondParenthesis = array.indexOf(")", i + 1);
-        extractOperation.push(array.slice(i + 1, secondParenthesis));
         // Calculate and replace the parentheses with the result.
         array.splice(i, secondParenthesis - i + 1, calculate(array.slice(i + 1, secondParenthesis)));
     }
