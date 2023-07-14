@@ -1,24 +1,20 @@
-const userString = "(-2 + 4) * 3";
+const userString = "4 + 21 * (1 - 2 / 2) + 38";
 
 const evaluateExpression = (string) => {
     // String to Array for calculate
     let resultArray = string.match(/(-?\d+|\+|\*|\/|%|\(|\)|-)/g);
-    console.log(handleParenthesisAndCalculate(resultArray));
-};
 
-const handleParenthesisAndCalculate = (array) => {
+    // Firstly treatment of parentheses
     let i = -1;
-
-    while ((i = array.indexOf("(", i + 1)) >= 0) {
-        let secondParenthesis = array.indexOf(")", i + 1);
+    while ((i = resultArray.indexOf("(", i + 1)) >= 0) {
+        let secondParenthesis = resultArray.indexOf(")", i + 1);
         // Calculate and replace the parentheses with the result.
-        array.splice(i, secondParenthesis - i + 1, calculate(array.slice(i + 1, secondParenthesis)));
+        resultArray.splice(i, secondParenthesis - i + 1, calculate(resultArray.slice(i + 1, secondParenthesis)));
     }
-    return calculate(array);
+    return calculate(resultArray);
 };
 
 const calculate = (arrayOfOperation) => {
-    console.log(arrayOfOperation);
     let i = 0;
 
     while (arrayOfOperation.length > 1) {
@@ -60,4 +56,4 @@ const calculate = (arrayOfOperation) => {
     return arrayOfOperation[0];
 };
 
-evaluateExpression(userString);
+console.log(evaluateExpression(userString));
