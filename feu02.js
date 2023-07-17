@@ -21,6 +21,7 @@ const findForm = () => {
                 for (let l = 0; l < tab2[k].length; l++) {
                     if (found && formWidth === count) {
                         console.log("TOTO")
+                        console.log(count)
                         if (tab1[i + 1][l] === tab2[k][l]) {
                             console.log(tab1[i + 1][l] + "brolala");
                             count = 0;
