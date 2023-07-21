@@ -1,7 +1,12 @@
-let tab1 = [[0, 0, 0, 0], [1, 1, 1, 1], [2, 3, 3, 1]];
-let tab2 = [[1, 1], ["-", 1]];
-let tabResult = [];
+let tab1 = [
+    [0, 0, 0, 0],
+    [1, 1, 1, 1],
+    [2, 3, 3, 1]];
 
+let tab2 = [
+    [1, 1, 1],
+    ["-", "-", 1]];
+let tabResult = [];
 
 let formWidth = tab2[0].length;
 let formHeight = tab2.length;
@@ -24,15 +29,16 @@ const findForm = () => {
                     console.log(tabCompare)
                     if (tab1[i][j] === tab2[k][l]) {
                         found = true;
-
                     }
                 }
+
                 if (found && formWidth === count) {
 
                     let nextLineOfTab1 = tab1[i + 1];
                     console.log(nextLineOfTab1)
                     let nextLineOfTab2 = tab2[indexK + 1];
                     console.log(nextLineOfTab2)
+
                     if (nextLineOfTab1 !== undefined) {
                         verifyNextLine(nextLineOfTab1, nextLineOfTab2, tabCompare, j);
 
