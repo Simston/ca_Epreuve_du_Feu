@@ -1,105 +1,53 @@
-let tab1 = [
-    [0, 0, 0, 0],
-    [1, 1, 1, 1],
-    [2, 3, 3, 1]];
+function overlayForm(tab1, tab2) {
+    let formWidth = tab2[0].length;
+    let formHeight = tab2.length;
+    let overlayPos = [-1, -1];
 
-let tab2 = [
-    [1, 1, 1],
-    ["-", "-", 1]];
-let tabResult = [];
-
-let formWidth = tab2[0].length;
-let formHeight = tab2.length;
-let count = 0;
-let found = false;
-let indexK = 0;
-
-const findForm = () => {
+    // Trouver la position de superposition
     for (let i = 0; i < tab1.length; i++) {
-        let tabCompare = [];
-
-        console.log(tab1[i] + "Premiere boucle")
-
         for (let j = 0; j < tab1[i].length; j++) {
-            found = false;
-
+            let matchFound = true;
             for (let k = 0; k < formHeight; k++) {
-                indexK = k;
-                for (let l = 0; l < tab2[k].length; l++) {
-                    console.log(tabCompare)
-                    if (tab1[i][j] === tab2[k][l]) {
-                        found = true;
+                for (let l = 0; l < formWidth; l++) {
+                    const tab1Row = tab1[i + k];
+                    const tab1Col = tab1Row[j + l];
+                    const tab2Val = tab2[k][l];
+
+                    if (tab2Val !== '-' && tab1Col !== tab2Val) {
+                        matchFound = false;
+                        break;
                     }
                 }
-
-                if (found && formWidth === count) {
-
-                    let nextLineOfTab1 = tab1[i + 1];
-                    console.log(nextLineOfTab1)
-                    let nextLineOfTab2 = tab2[indexK + 1];
-                    console.log(nextLineOfTab2)
-
-                    if (nextLineOfTab1 !== undefined) {
-                        verifyNextLine(nextLineOfTab1, nextLineOfTab2, tabCompare, j);
-
-                    }
-                    console.log(tabCompare + " test retour");
-                }
+                if (!matchFound) break;
             }
-            //console.log(indexesCompare)
+            if (matchFound) {
+                overlayPos = [i, j];
+                break;
+            }
+        }
+        if (overlayPos[0] !== -1) break;
+    }
 
-            if (found) {
-                count += 1;
-                tabCompare.push(tab1[i][j]);
-                console.log(tabCompare)
+    // Superposer tab2 sur tab1 et remplir les autres parties avec '-'
+    let tabResult = [];
+    for (let i = 0; i < tab1.length; i++) {
+        let row = [];
+        for (let j = 0; j < tab1[i].length; j++) {
+            if (i >= overlayPos[0] && i < overlayPos[0] + formHeight && j >= overlayPos[1] && j < overlayPos[1] + formWidth) {
+                const rowOffset = i - overlayPos[0];
+                const colOffset = j - overlayPos[1];
+                row.push(tab2[rowOffset][colOffset]);
             } else {
-                tabCompare.push('-');
-                console.log(tabCompare);
+                row.push('-');
             }
         }
-
-        tabResult.push(tabCompare);
+        tabResult.push(row);
     }
 
-    console.log(tabResult);
-
+    return tabResult;
 }
 
-const verifyNextLine = (nextLineA, nextLineB, tabCompare, indexPosJ) => {
-    let tempSecondJ = indexPosJ;
-    console.log(indexPosJ + " JJJJJJJ")
-    indexPosJ = indexPosJ - nextLineB.length;
-    console.log(nextLineB.length + " index pos j")
-    for (let i = 0; i < nextLineB.length; i++) {
-        console.log(nextLineA[i + indexPosJ] + "verif en cours de TAB1 I J");
-        console.log(nextLineB[i])
-        if (nextLineA[i + indexPosJ] !== nextLineB[i] && nextLineB[i] !== "-") {
-            count = 0;
-            found = false;
-            console.log(tabCompare + "  TABCOMPARE")
-            tabCompare = resetTab(tabCompare, tempSecondJ);
-            console.log("BRO")
-        } else {
-            console.log("LALA")
+let tab1 = [[0, 0, 0, 0, 3], [1, 1, 1, 1], [2, 3, 3, 1]];
+let tab2 = [[0, 0, 0, 0], ["-", "-", 1, 1], ['-', '-', '-', 1]];
 
-            found = true;
-        }
-    }
-    if (found) {
-        return found;
-    } else {
-        return tabCompare
-    }
-}
-
-const resetTab = (array, indexJ) => {
-
-    for (let i = 0; i < indexJ; i++) {
-        array.splice(i, 1, "0");
-    }
-    console.log(array + " array")
-    return array;
-}
-
-
-findForm();
+console.log(overlayForm(tab1, tab2));
