@@ -1,3 +1,8 @@
+const fs = require('fs');
+const MyTools = require('./MyTools');
+const myTools = new MyTools();
+const commandLineArgs = process.argv;
+
 function overlayForm(tab1, tab2) {
     let formWidth = tab2[0].length;
     let formHeight = tab2.length;
@@ -43,11 +48,26 @@ function overlayForm(tab1, tab2) {
         }
         tabResult.push(row);
     }
-
     return tabResult;
 }
 
-let tab1 = [[0, 0, 0, 0, 3], [1, 1, 1, 1], [2, 3, 3, 1]];
-let tab2 = [[0, 0, 0, 0], ["-", "-", 1, 1], ['-', '-', '-', 1]];
+const readFileAndTransformToArrayData = (pathFile) => {
+    try {
+        const data = fs.readFileSync(pathFile, 'utf8');
+        const linesArray = data.split(/\r?\n/);
+        const charactersArray = linesArray.map(line => line.split("").map(char => (char === " " ? "-" : Number(char))));
+        return charactersArray;
+    } catch (err) {
+        console.error(err);
+    }
+}
 
-console.log(overlayForm(tab1, tab2));
+const hasMinArgsCount = myTools.checkArgumentCount(2, commandLineArgs)
+if (!hasMinArgsCount) {
+    console.log("Veuillez entrer 2 noms de fichiers.");
+} else {
+    // parsing
+    let board = readFileAndTransformToArrayData("./" + commandLineArgs[2]);
+    let formBoard = readFileAndTransformToArrayData("./" + commandLineArgs[3])
+    console.log(overlayForm(board, formBoard));
+}
