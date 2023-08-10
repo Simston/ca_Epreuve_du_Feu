@@ -6,15 +6,52 @@ const commandLineArgs = process.argv;
 const requireNumber = 9;
 
 function sudokySolve(arr) {
-    let isModified = true;
+    let count = 0;
 
-    while (isModified) {
-        isModified = false;
-        isModified |= rowVerification(arr);
-        isModified |= colVerification(arr);
-        // Add method for square
+    while (containsDot(arr)) {
+        console.log("tour", count++)
+        rowVerification(arr);
+        colVerification(arr);
+        squareVerification(arr)
     }
     console.log(arr.join('\n'));
+}
+function containsDot(arr) {
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr[i].length; j++) {
+            if (arr[i][j] === '.') {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function squareVerification(arr) {
+    let square = [];
+    let missingIdx = [];
+
+    // Parcourir les 3 groupes principaux de carrés verticalement
+    for (let rowOffset = 0; rowOffset < 9; rowOffset += 3) {
+        // Parcourir les 3 groupes principaux de carrés horizontalement
+        for (let colOffset = 0; colOffset < 9; colOffset += 3) {
+            square = [];
+            missingIdx = [];
+
+            // Parcourir l'intérieur de chaque carré
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    // Utilisez l'offset pour obtenir la valeur correcte à partir de arr
+                    if (arr[i + rowOffset][j + colOffset] === '.') {
+                        missingIdx.push(i + rowOffset, j + colOffset);
+                    } else {
+                        square.push(arr[i + rowOffset][j + colOffset]);
+                    }
+                }
+            }
+            if (square.length === (requireNumber - 1)) verifyLine(arr, square, missingIdx);
+        }
+    }
 }
 
 function colVerification(arr) {
