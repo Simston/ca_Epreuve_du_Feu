@@ -12,7 +12,7 @@ function sudokySolve(arr) {
         isModified = false;
         isModified |= rowVerification(arr);
         isModified |= colVerification(arr);
-        // Vous pourriez ajouter ici la fonction de vérification de carré (boxVerification)
+        // Add method for square
     }
     console.log(arr.join('\n'));
 }
